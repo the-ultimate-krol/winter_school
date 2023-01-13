@@ -1,4 +1,4 @@
-# Winter School 2023 -- NER laboratories
+# Winter School 2023 -- NER workshop
 Named Entity Recognition
 
 How are we going to work:
