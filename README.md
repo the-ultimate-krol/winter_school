@@ -1,2 +1,2 @@
-# winter_school_NER_lab
+# Winter School 2023 -- NER laboratories
 Named Entity Recognition
