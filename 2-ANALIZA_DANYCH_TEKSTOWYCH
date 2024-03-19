@@ -1,0 +1,814 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/the-ultimate-krol/winter_school/blob/main/2-ANALIZA_DANYCH_TEKSTOWYCH\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "yRvCuHz36wh9"
+      },
+      "source": [
+        "# Analiza danych tekstowych -- wstęp\n",
+        "\n",
+        "## Środowisko analityczne\n",
+        "\n",
+        "Przed Wami krótkie wprowadzenie do podstwowych zadań z obszaru NLP. Wykonamy je na dostępnych danych, mało wymagającym pipelinie i dla języka angielskiego. Ale uwaga: analogiczne zadania będziecie robić dla języka polskiego (praca samodzielna, analogiczna do prezentowanej dla języka angielskiego).\n",
+        "\n",
+        "Będziemy używać pakietu `spacy`, który sprawdza się przy analizie tekstu, `scikit-learn` do obliczeń i `matplotlip`, który pomoże zaprezentować dane na wykresach. Jako dane anglojęzyczne weźmiemy sobie `en_core_web_sm` --> model od SpaCy trenowany na tekstach newsów z języka angielskiego. Pierwsze zadanie dla Was: Jaki pakiet danych odpowiada za dane z języka polskiego?\n",
+        "\n",
+        "Moduł `datasets` odpowiada za łatwe ładowanie danych. Dane pochodzą z [HuggingFace](https://huggingface.co/docs/datasets/v1.8.0/loading_datasets.html)."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "b6vQYVbzRT2b"
+      },
+      "outputs": [],
+      "source": [
+        "!pip install spacy scikit-learn matplotlib datasets\n",
+        "!python -m spacy download en_core_web_sm"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "3sPaOFZMRSku"
+      },
+      "source": [
+        "## Tokenizacja\n",
+        "\n",
+        "Pierwsze zadanie polega na stokenizowaniu tekstu, co oznacza ni mniej ni więcej jak podział tekstu na najmniejsze znaczące elementy, które wspólnie tworzą wyrazy tekstowe i tekst. Tokenizacja dla każdego języka jest inna, co możecie zaobserwować zestawiając dane dla języka angielskiego z danymi dla języka polskiego i porównując wyniki uzyskane na tekstach.\n",
+        "\n",
+        "Tokenizacja przydaje się w życiu. Pracując na tokenach, pracujemy na uniwersalnych danych i porównujemy dane w sposób niestronniczy.\n",
+        "\n",
+        "Porównajcie zdania:\n",
+        "\"I'd like you to have some fun working with all those excercises like mice have fun with every piece of chees. It's all we need to have some fun in life.\"\n",
+        "\"Chciałabym, żebyście mieli tyle zabawy z ćwiczeniami, ile ubawu mają myszy z każdym jednym kawałeczkiem sera. Wszystko, czego potrzebujemy w żyćku, to zabawa.\"\n",
+        "\n",
+        "\n",
+        "Wyjaśnienie:\n",
+        "Dowiadujemy się tu jak tokenizować tekst, a za chwilę dowiemy się, że te tokeny mogą być przetwarzane w wektory, na podstawie których możemy przewidywać kolejne wyrazy tekstowe. Jeśli jednak wynik tokenizacji nie ma być użyty bezpośrednio jako dane wejściowe sieci neuronowej, możemy użyć przyjaznej tokenizacji z pakietu `spacy`.\n",
+        "\n",
+        "Zainicjujmy więc pakiet `spacy`."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "vZr9Oy8P7SHE"
+      },
+      "outputs": [],
+      "source": [
+        "import spacy\n",
+        "\n",
+        "nlp = spacy.load('en_core_web_sm')"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "##Miejsce na Twój kod"
+      ],
+      "metadata": {
+        "id": "R3ELyRc2zaJO"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "AfcttssX8Q16"
+      },
+      "source": [
+        "Najpierw stokenizujmy tekst dla języka angielskiego:"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "Y4a1_8Tf8Vwc"
+      },
+      "outputs": [],
+      "source": [
+        "text = \"\"\"I'd like you to have some fun working with all those excercises like mice have fun with every piece of chees. It's all we need to have some fun in life.\"\"\"\n",
+        "\n",
+        "tokens_en = nlp_en(text)\n",
+        "[token.text for token in tokens_en]"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "A potem dla polskiego:\n",
+        "(pamiętajmy o innej nazwie zmiennych!)"
+      ],
+      "metadata": {
+        "id": "PRB7_tIjzujG"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "### Miejsce na Twój kod"
+      ],
+      "metadata": {
+        "id": "4S6_NcsdzqvP"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "y06DuFMVDmWO"
+      },
+      "source": [
+        "A teraz podzielmy teksty na zdania."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "Iq9wbNqGDoox",
+        "scrolled": true
+      },
+      "outputs": [],
+      "source": [
+        "[sentence.text for sentence in tokens.sents]"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "### ⭐ Zadanie sprawdzające umiejętności⭐\n",
+        "\n",
+        "Stwórz zdanie, które:\n",
+        "- zawiera skróty (USA, U.S., i.e., ww.)\n",
+        "- zawiera nazwy (McDonald's, Kelly's)\n",
+        "- zawiera czasowniki w formach warunkowych, przypuszczających (I would like, chciałabym).\n",
+        "\n",
+        "```\n",
+        "np. We have been to U.K. before we got to the very special country, i.e. Poland.\n",
+        "```"
+      ],
+      "metadata": {
+        "id": "mNlfmjT60NLh"
+      }
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "hdKGB9UB-N3Z"
+      },
+      "outputs": [],
+      "source": [
+        "### Miejsce na Twój kod"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "Z39blSV0-sof"
+      },
+      "source": [
+        "## Wykrywanie kategorii morfologicznych\n",
+        "\n",
+        "`spacy` można używać też do analizy kategorii morfologicznych (morfoskładniowych, zwanych też *częściami mowy*, które -- o zgrozo -- odmieniają się przez przypadki, osoby i stopnie). Tagowanie morfoskładniowe, inaczej Part-of-Speech Tagging (POS Tagging) przydaje się w bardziej zaawansowanych zadaniach, może też pozwolić na wnikliwy wgląd w właściwości tekstu.\n",
+        "\n",
+        "W tym zadaniu możemy użyć tokenów (`tokens_en`) z poprzednich ćwiczeń."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "AqCgDjRt-zMG"
+      },
+      "outputs": [],
+      "source": [
+        "[(token.text, token.pos_) for token in tokens]"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "h0J9krYr_qal"
+      },
+      "source": [
+        "### ⭐ Zadanie sprawdzające umiejętności⭐\n",
+        "\n",
+        "**A teraz** zobaczmy, ile i jakich tagów (w tekstach można znaleźć też określenie POS tagów) mamy w naszych przykładach. Jakie problemy mogą być poruszone przy okazji takiego zadania? Jak zrobić wykres? (Za wykres jest bonus 📊 😀)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "Ihx1WDro_wKH"
+      },
+      "outputs": [],
+      "source": [
+        "### Miejsce na Twój kod"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "dAgdEyZI_02h"
+      },
+      "source": [
+        "Lematyzacja\n",
+        "Wchodzimy na kolejny poziom abstrakcji. Liczymy teraz nie tokeny, a typy. Załóżmy, że chcemy policzyć dzieci z przedszkola bawiące się głośno na placu zabaw za naszym oknem. Chcemy dowiedzieć się, kto krzyczy głośniej, dziewczynki czy chłopcy. W tym celu przyglądamy się każdemu dziecku i stwierdzamy, czy jest chłopcem czy dziewczynką. Sprowadzamy patrzenie na obiekt do binarnego wyboru płci, czasem mamy wątpliwości, co jest normalne. Możemy (z wahaniem lub bez) powiedzieć, że na placu zabaw są dwa typy dzieci: krzyczące i nie, dziewczynki i chłopcy. I podobnie jest z lematyzacją, choć trochę inaczej. Żeby zobaczyć, co jest w zdaniu, musimy przyjrzeć się okazom i stwiedzić, że jeśli w tekście dziecko drze się (jakby jutra nie było), darło się (aż do momentu, kiedy nie zagłuszyły go syreny policyjne) lub będzie się darło (do ukończenia 18 roku życia), to mówimy o jednej czynności darcia się wyrażonej jako różne formy czasownika DRZEĆ SIĘ. To jak w słowniku. Jeśli chcemy sprawdzić pisownię, szukamy czegoś co jest w mianowniku liczby pojedynczej i rodzaju męskim, albo w bezokoliczniku, albo w stopniu równym i też rodzaju męskim.\n",
+        "\n",
+        "Co i kiedy liczymy? Wypisując wszystkie elementy (tokeny), liczyliśmy budulec tekstu. Wypisując lematy (typy), liczymy użycie konkretnych pojęć niezależnie od ich formy.\n",
+        "\n",
+        "Jeśli chcesz policzyć, ile słów zostało wymienionych w tekście, bardzo przydatne jest sprowadzenie wszystkich słów do ich form podstawowych. Proces ten nazywany jest lematyzacją. Tekst przetworzony za pomocą spacy zawiera już lematy dla każdego tokena. Wykorzystamy tę technikę w dalszej części laboratorium."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "CIEpFin0_3cE"
+      },
+      "outputs": [],
+      "source": [
+        "[(token.text, token.lemma_) for token in tokens]"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "### Miejsce na Twój kod"
+      ],
+      "metadata": {
+        "id": "AXk28TGz0r1B"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "d_Y0w9TwHxiq"
+      },
+      "source": [
+        "⭐ Zadanie sprawdzające umiejętności ⭐\n",
+        "> Dla nietypowych rzeczowników w języku angielskim:\n",
+        "\n",
+        "* entities\n",
+        "* was\n",
+        "* mice\n",
+        "*cacti\n",
+        "* octopi\n",
+        "\n",
+        "znajdź lematy i oceń, czy spacy rozpoznał je poprawnie. Czy możesz wskazać analogiczne przykłady dla polskiego?"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "oPMnY3xpH6ZT"
+      },
+      "outputs": [],
+      "source": [
+        "### Miejsce na Twój kod"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "Mih5AZl5_35c"
+      },
+      "source": [
+        "## Named entity recognition\n",
+        "\n",
+        "Analiza tekstu przy użyciu `spacy` może być bardziej zaawansowana (do tej pory analizowaliśmy składnię, teraz czas na odrobinę semantyki). Takim bardziej złożonym zadaniem jest rozpoznawanie encji nazwanych (NER), a więc pewnego typu obiektów, które mogą być nazwą własną, ale wcale nie muszą.\n",
+        "\n",
+        "### Zatem"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "fqAvaZj_Cgiv"
+      },
+      "outputs": [],
+      "source": [
+        "ner_result = nlp(\"\"\"Israel is being urged by the international community - including close ally the US - to do more to limit civilian casualties.\n",
+        "\n",
+        "Hamas officials say at least 16,248 people have been killed in Gaza since the start of the conflict, about three quarters of them women and children.\n",
+        "\n",
+        "Defending Israel's war strategy, former PM Naftali Bennett has told the BBC that Israel has been showing restraint in Gaza.\n",
+        "\n",
+        "If we wanted to harm civilians, we could have won the whole war in one day on October 8th, he said.\n",
+        "\n",
+        "We could have indiscriminately bombed Gaza.\n",
+        "\n",
+        "It could have been the easiest thing in the world... [but] we're not doing that.\"\"\")\n",
+        "[(e.text, e.label_, e.start_char, e.end_char) for e in ner_result.ents]"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "ONbTGgU-Ex_0"
+      },
+      "source": [
+        "Każda kategoria ma w SpaCy rozwinięcie:"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "wGruXB_UEgHn"
+      },
+      "outputs": [],
+      "source": [
+        "spacy.explain('GPE')"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "Woivn9naE9Al"
+      },
+      "source": [
+        "⭐ Zadanie sprawdzające umiejętności ⭐\n",
+        "\n",
+        "> Zobacz na to samo zadanie, ale w języku polskim.\n",
+        "\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "hlkMZSw6FDPF"
+      },
+      "outputs": [],
+      "source": [
+        "### Miejsce na Twój kod"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#### ⭐ Zadanie sprawdzające umiejętności ⭐\n",
+        "\n",
+        "Znajdź tekst, który zawiera typ `WORK_OF_ART`."
+      ],
+      "metadata": {
+        "id": "9RO0Z_uJ1hNh"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "### Miejsce na Twój kod"
+      ],
+      "metadata": {
+        "id": "UgPECLjt1j3J"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "Q0RM3w_wFJsc"
+      },
+      "source": [
+        "### Obrazki\n",
+        "Moduł displacy odpowiada za wizualizację wyników działania NERa. Podkreślenie / wyróżnienie kolorystyczne sprawiają, że łatwiej odczytać wyniki, żeby pobieżnie je przeanalizować."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "XHBUbGOuFt2y"
+      },
+      "outputs": [],
+      "source": [
+        "spacy.displacy.render(ner_result, style=\"ent\", jupyter=True)"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "4xNIdIyLGY0I"
+      },
+      "source": [
+        "Korzystając z modułu `displacy` możemy też przeszukiwać informacje pod kątem jednej wybranej lub kilku pożądanych kateogrii. Żeby tego dokonać, musimy skorzystać z funkcji `displacy.render`."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "lr8o6bPUGi5l"
+      },
+      "outputs": [],
+      "source": [
+        "spacy.displacy.render(ner_result, style=\"ent\", jupyter=True, options={\"ents\": [\"PERSON\", \"DATE\"]})"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "r7UQMXj7GAaK"
+      },
+      "source": [
+        "#### ⭐ Zadanie sprawdzające umiejętności ⭐\n",
+        "\n",
+        "Spróbuj przeanalizować dłuższy tekst za pomocą `spacy` i zwizualizuj wynik NER za pomocą `displacy`. Użyj jakiegoś artykułu znalezionego w sieci.\n",
+        "\n",
+        "Następnie policz ile razy każdy typ encji został wykryty w tekście i wyświetl statystyki. Dodatkowy bonus za wykres 📊 😀"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "jaciXADYZ6Qp"
+      },
+      "outputs": [],
+      "source": [
+        "### Miejsce na Twój kod"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "iPYmmqLqG5YI"
+      },
+      "source": [
+        "## Detecting text similarity\n",
+        "\n",
+        "### Bag of words\n",
+        "\n",
+        "Let's say we have three texts.\n",
+        "\n",
+        "> The quick brown fox jumps over the lazy dog.\n",
+        "\n",
+        "> The dog kept barking over the night.\n",
+        "\n",
+        "> A lazy fisherman with his dog met a fox last night.\n",
+        "\n",
+        "How much they are similar to each other? Can we say they talking about similar topics?\n",
+        "\n",
+        "A very idiomatic way of finding this out is a technique called *bag of words*. Its based on the calculation of the frequency of words apearing in the all texts, selecting the most popular ones and then representing the text as a list of integers containing the number of appearances of these words.\n",
+        "\n",
+        "Example better than a lecture!\n",
+        "\n",
+        "We will use the `sklearn` module to calculate the text metrics. The `CountVectorizer` class does all of the calculations for us. The `max_features=5` parameter tells the vectorizer we want to select at most 5 the most popular tokens from all of the texts."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "myGn2xGKI9hr"
+      },
+      "outputs": [],
+      "source": [
+        "from sklearn.feature_extraction.text import CountVectorizer\n",
+        "\n",
+        "texts = [\n",
+        "    \"The quick brown fox jumps over the lazy dog.\",\n",
+        "    \"The dog kept barking very loud barking and barking again over the night.\",\n",
+        "    \"A lazy fisherman with his dog met a fox last night.\",\n",
+        "]\n",
+        "\n",
+        "count_vector = CountVectorizer(max_features=5)\n",
+        "data_count = count_vector.fit_transform(texts)\n",
+        "data_count.toarray()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "lMeNodp3Kj8y"
+      },
+      "source": [
+        "Wooow! What does it even mean? Let's see the tokens that were chosen to describe the texts."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "-0ABs1ziKyDA"
+      },
+      "outputs": [],
+      "source": [
+        "count_vector.get_feature_names_out()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "fme7G6lDK1Eg"
+      },
+      "source": [
+        "Ok, so the chosen tokens are\n",
+        "\n",
+        "```\n",
+        "[ 'barking', 'dog', 'fox', 'over', 'the']\n",
+        "```\n",
+        "\n",
+        "and the texts representation after creating the bag of words is:\n",
+        "\n",
+        "```\n",
+        "array([[1, 1, 1, 0, 2],\n",
+        "       [1, 0, 0, 1, 2],\n",
+        "       [1, 1, 1, 1, 0]])\n",
+        "```\n",
+        "\n",
+        "It means that:\n",
+        "* the word `barking` appeared three times in general, but only in one sentence\n",
+        "* the word `dog` appered in all of the texts once\n",
+        "* the word `fox` appeared once in the first and the third text\n",
+        "* the word `over` appeared once in the second and the third text\n",
+        "* the word `the` appeared in the first and the second text, twice in both of them\n",
+        "\n",
+        "Now you should understand the *bag of words* text representation. We can say that the more similar the vectors are, the more similar the texts are, too. We can obviously calculate the distance between them and even visualize them on a chart, but we need a few more exercies and obviously - more data!\n",
+        "\n",
+        "#### ⭐ Task for you ⭐\n",
+        "\n",
+        "Try to experiment with the `max_features` option. What number of `max_features` results in best vectors according to you?"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "qe2_07hOMKbO"
+      },
+      "outputs": [],
+      "source": [
+        "# your code here"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "Q0EMySonML50"
+      },
+      "source": [
+        "### Stopwords\n",
+        "\n",
+        "As you saw, the word `the` also has been counted although it does not carry any information in the text. This can greatly influence the results of our analysis, so it's very common to remove such words from the text before calculating any metrics. These words are called *stopwords* and the `sklearn` module has built in mechanisms to remove them. Let's see some of them first."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "QkhFQzFdMs7U"
+      },
+      "outputs": [],
+      "source": [
+        "from sklearn.feature_extraction._stop_words import ENGLISH_STOP_WORDS\n",
+        "\n",
+        "list(ENGLISH_STOP_WORDS)[:100]"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "eHOezUD9OHnJ"
+      },
+      "source": [
+        "You don't need to import the stopwords to use them, because they are managed internally within the package (noticed the `_` in the package name?). However, you may find it interesting to see what's inside!\n",
+        "\n",
+        "Now, all you need to do is to define the builtin list of stopwords you want to use before calculating the vectors."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "rSzlqDvFOSbH"
+      },
+      "outputs": [],
+      "source": [
+        "count_vector = CountVectorizer(max_features=10, stop_words='english')\n",
+        "data_count = count_vector.fit_transform(texts)\n",
+        "count_vector.get_feature_names_out()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "L52dVF9qO_N3"
+      },
+      "source": [
+        "### Visualization of the text vectors in the chart\n",
+        "\n",
+        "Detecting similar texts if you have a lot of data can be challenging. It's always helpful to visualize the data on the screen, so we could plot the vectors and see if we can detect some groups on the screen. It will be hard for three texts we are currently operating on, but you will get the idea.\n",
+        "\n",
+        "However, the screens are 2D only in 2023. We can now postpone this lab and wait to 2048 when he 5D screens will be available, or use the popular `t-SNE` algorithm to *flatten* the data and then visualize them. We will take the second solution!\n",
+        "\n",
+        "Without taking too deep into how this algorithm works, it is able to reduce the XD vectors to YD vectors, with X>Y, maintaining distances between them. For our text, we want to reduce 5D vectors (5 features of the text) to 2D vectors (so to the format that can be plotted on the screen)."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "-6c2W1S_QGIr"
+      },
+      "outputs": [],
+      "source": [
+        "from sklearn.manifold import TSNE\n",
+        "\n",
+        "tsne_model = TSNE(n_components=2, perplexity=2)\n",
+        "tsne_data = tsne_model.fit_transform(data_count.toarray())\n",
+        "\n",
+        "tsne_data\n",
+        "#data_count.toarray()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "Zn5GI1iFQtr1"
+      },
+      "source": [
+        "As you can see, the algorithm transformed all of the vectors into 2D. We can plot them!"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "hbwqxktaQ0gd"
+      },
+      "outputs": [],
+      "source": [
+        "import matplotlib.pyplot as plt\n",
+        "\n",
+        "fig, ax = plt.subplots()\n",
+        "ax.scatter(tsne_data[:, 0], tsne_data[:, 1])\n",
+        "\n",
+        "for i, label in enumerate([\"quick fox\", \"barking dog\", \"lazy fisherman\"]):\n",
+        "    ax.annotate(label, (tsne_data[i, 0], tsne_data[i, 1]))\n",
+        "\n",
+        "plt.show()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "I60UgASRT70i"
+      },
+      "source": [
+        "There are only three datapoints so it's hard to tell if the texts can be considered similar to each other or not. However, if we had many more texts, we might suspect that the data points would create some distinguishable groups, meaning the text are talking about similar topics."
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "Bvhm1-manrMN"
+      },
+      "source": [
+        "## Datasets\n",
+        "\n",
+        "We need more data for the final task. Luckily, there are many options for us to start with while learning. One option is to use the [HuggingFace](https://huggingface.co/docs/datasets/v1.8.0/loading_datasets.html) `datasets` module to download some texts we can work on.\n",
+        "\n",
+        "Let's see what's inside."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "CU9xQv2RoAs-"
+      },
+      "outputs": [],
+      "source": [
+        "import datasets\n",
+        "\n",
+        "datasets.list_datasets()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "9wyhw7igoQdD"
+      },
+      "source": [
+        "As you can see, there are many datasets we can work on. How to load them?"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "8GgJ05UnoclR"
+      },
+      "outputs": [],
+      "source": [
+        "dataset = datasets.load_dataset('ag_news', split='train')\n",
+        "dataset"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "oU8czV0vqBkG"
+      },
+      "source": [
+        "As we saw in the previous examples, the list of texts will be the easier structure to work on for now. Having the above dataset with `text` and `label` fields, we can create a list of texts with a simple comprehension."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "6GyDWshMqSHq"
+      },
+      "outputs": [],
+      "source": [
+        "large_texts = [item['text'] for item in dataset]\n",
+        "large_texts[:10]"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "pYYikmVXUM9Y"
+      },
+      "source": [
+        "## ⭐ A big 🗻 task for you ⭐\n",
+        "\n",
+        "You have all the tools!\n",
+        "\n",
+        "Collect large dataset of texts from *HF* and:\n",
+        "\n",
+        "1.   Prepare them for analysis, e.g.\n",
+        "  1. Tokenize them.\n",
+        "  1. Transform the tokens into lemmas (so the `dog` and the `dogs` are treated as the same feature).\n",
+        "2. Represent the texts as bag of words, remembering about stopwords. Experiment with the features count. If you find that there are features that influence the representation, go back to the step 1. and take it into consideration when preparing the data (maybe you want to get rid of numbers?).\n",
+        "3. Visualize the data on a plot (without labels for better performance). Can you distiguish some groups of texts? What these texts are about?\n",
+        "4. Detect named entites in groups representatives. Do named etities also suggest the topic of the text?\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "dkIYNxKC4D0c"
+      },
+      "outputs": [],
+      "source": [
+        "# your code here"
+      ]
+    }
+  ],
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "display_name": "Python 3 (ipykernel)",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.11.1"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
